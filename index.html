@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Optimizer - Interactive Route Finder</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <header class="app-header">
+                <div class="logo-icon">🌍</div>
+                <div class="title-area">
+                    <h1>Travel Optimizer</h1>
+                    <p class="subtitle">Dijkstra Shortest Path Visualizer</p>
+                </div>
+            </header>
+
+            <!-- Mode Selector / Instructions -->
+            <section class="control-card instructions-card">
+                <h3>💡 Quick Guide</h3>
+                <ul>
+                    <li><strong>Click empty canvas</strong> to add a new city.</li>
+                    <li><strong>Drag</strong> a city to move it around.</li>
+                    <li><strong>Shift + Click</strong> a city, then click another to build a road.</li>
+                    <li><strong>Click a city</strong> to select it, or use the menu below.</li>
+                </ul>
+            </section>
+
+            <!-- Actions Panel -->
+            <section class="control-card">
+                <h3>🛠️ Map Controls</h3>
+                
+                <div class="preset-group">
+                    <label for="preset-select">Load Preset Map:</label>
+                    <select id="preset-select">
+                        <option value="europe">European Capitals</option>
+                        <option value="grid">Structured Grid</option>
+                        <option value="star">Star Hub Network</option>
+                        <option value="empty">Clear Map (Custom)</option>
+                    </select>
+                </div>
+
+                <div class="button-row">
+                    <button id="btn-clear" class="btn btn-danger">Clear All</button>
+                    <button id="btn-reset" class="btn btn-secondary">Reset Path</button>
+                </div>
+            </section>
+
+            <!-- Start / End Selector -->
+            <section class="control-card">
+                <h3>📍 Select Route</h3>
+                <div class="select-group">
+                    <div class="input-control">
+                        <label for="select-start">Start City:</label>
+                        <select id="select-start" class="route-select">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="input-control">
+                        <label for="select-end">End City:</label>
+                        <select id="select-end" class="route-select">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Optimization Results -->
+            <section class="control-card results-card highlight">
+                <h3>📊 Optimizer Results</h3>
+                <div class="results-grid">
+                    <div class="result-item">
+                        <span class="result-label">Status:</span>
+                        <span id="route-status" class="result-value status-searching">Select Start/End</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Total Distance:</span>
+                        <span id="route-distance" class="result-value">-</span>
+                    </div>
+                </div>
+                <div class="path-display-container">
+                    <span class="result-label">Optimal Path:</span>
+                    <div id="route-path" class="path-flow-list">
+                        <!-- Populated dynamically -->
+                        <span class="placeholder-text">No active path</span>
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+        <!-- Main Visualizer Area -->
+        <main class="visualizer-container">
+            <!-- Canvas Toolbar for active drawing tools -->
+            <div class="canvas-header">
+                <div class="tool-picker">
+                    <button id="tool-move" class="tool-btn active" title="Move Cities (Drag)"><span class="tool-emoji">🖐️</span> Move</button>
+                    <button id="tool-add-city" class="tool-btn" title="Click Canvas to Add City"><span class="tool-emoji">📍</span> Add City</button>
+                    <button id="tool-add-road" class="tool-btn" title="Click City A then City B to Connect"><span class="tool-emoji">🛣️</span> Add Road</button>
+                    <button id="tool-delete" class="tool-btn" title="Click City or Road to Delete"><span class="tool-emoji">❌</span> Delete</button>
+                </div>
+                <div class="canvas-stats">
+                    <span id="stat-cities">0 Cities</span> | <span id="stat-roads">0 Roads</span>
+                </div>
+            </div>
+
+            <!-- Canvas Viewport -->
+            <div class="canvas-wrapper">
+                <canvas id="map-canvas"></canvas>
+                <div id="canvas-helper" class="canvas-helper-toast">Click on canvas to add a city</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit City / Connection Dialog Modal -->
+    <div id="edit-modal" class="modal-overlay hidden">
+        <div class="modal-content glassmorphism">
+            <h3 id="modal-title">Edit Element</h3>
+            <div class="modal-body">
+                <!-- Dynamic form gets injected here -->
+                <div id="modal-form-fields"></div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel" class="btn btn-secondary">Cancel</button>
+                <button id="modal-submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
